@@ -1,0 +1,19 @@
+#notification {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: white;
+    z-index: 9999;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+#notification.success {
+    background-color: #28a745; 
+  }
+#notification.error {
+    background-color: #dc3545; 
+  }

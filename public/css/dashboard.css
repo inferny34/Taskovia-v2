@@ -1,0 +1,552 @@
+body {
+font-family: Arial, sans-serif;
+background: #f4f4f4;
+}
+
+
+/* Barre en haut */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 12px 30px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    gap: 20px;
+    max-width: 100%
+  }
+  
+  /* Colonnes */
+  .navbar-left,
+  .navbar-center,
+  .navbar-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  .navbar-left {
+    flex: 1;
+  }
+
+  .logo-img {
+    height: 60px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+  }
+  
+  .navbar-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 15px;
+    flex: 2;
+    min-width: 200px; 
+  }
+  
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .user-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  
+  .bonjour {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .nom {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .role {
+    margin-left: 20px;
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+    font-style: italic;
+  }
+  
+  .navbar-right {
+    flex: 1;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  /* parametres appli */
+  .settings-container {
+    padding: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .avatar-section img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+    margin-bottom: 1rem;
+  }
+  
+  .upload-section {
+    margin-top: 2rem;
+  }
+  
+  .upload-section input[type="file"] {
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .upload-section button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .upload-section .success {
+    color: green;
+    margin-top: 10px;
+  }
+  
+  .btn-retour {
+    display: inline-block;
+    margin-top: 2rem;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  /* Logo */
+  .logo {
+    height: 60px !important;
+    width: auto !important;
+    max-width: 160px;
+    object-fit: contain;
+  }
+  
+  /* AVATAR + INFOS */
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    font-size: 14px;
+    text-align: left;
+  }
+  
+  .user-info .role {
+    font-size: 12px;
+    color: #888;
+  }
+
+  .priority-icon img {
+    width: 20px !important;
+    height: 20px !important;
+    display: inline-block;
+    object-fit: contain;
+    vertical-align: middle;
+    font-size: initial !important;
+  }
+  
+  /* Bouton */
+  .btn-settings,
+  .btn-logout {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .btn-settings {
+    background-color: #012BD6;
+    color: white;
+  }
+
+  .btn-settings:hover {
+    background-color: #0069d9;
+    color: white;
+  }
+  
+  .btn-logout {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .btn-logout:hover {
+    background-color: red;
+    color: white;
+  }
+  
+  .btn-settings i {
+    font-size: 18px;
+  }
+
+/* Tâche + recherche */
+.actions-bar {
+display: flex;
+align-items: center;
+padding: 15px 20px;
+gap: 20px;
+background: #fff;
+padding-top: 80px;
+padding-bottom: 80px;
+}
+
+.btn-nouvelle {
+padding: 8px 15px;
+background: #007bff;
+color: #fff;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.btn-nouvelle:hover {
+background: #0069d9;
+}
+
+.search-box {
+display: flex;
+align-items: center;
+background: #eef0f3;
+padding: 8px 12px;
+border-radius: 5px;
+width: 250px;
+}
+
+.search-box input {
+border: none;
+background: transparent;
+outline: none;
+margin-left: 8px;
+width: 100%;
+}
+
+/* Filtres */
+.filters {
+display: flex;
+gap: 20px;
+padding: 15px 20px;
+background: #fff;
+}
+
+/* Tableau ou liste de tâches */
+.task-list {
+margin: 20px;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+table th, table td {
+padding: 12px;
+text-align: left;
+border-bottom: 1px solid #ddd;
+}
+
+/* Statut, priorité, échéance */
+.status-icon, .priority-icon {
+font-size: 20px;
+}
+
+/* Exemples couleurs pour priorité */
+.priority-high { color: red; }
+.priority-medium { color: orange; }
+.priority-low { color: blue; }
+
+/* Blade du parametres appli */
+/* Conteneur principal des paramètres */
+.settings-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Titre principal */
+.settings-container h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Avatar */
+.avatar-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.avatar-section img {
+  width: 100px; 
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  image-rendering: auto;
+  -ms-interpolation-mode: bicubic;
+}
+
+.avatar-section img.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+/* Formulaire d'apercu de fichier */
+#filePreviewModal {
+  display: none;
+  z-index: 2000; /* ou une valeur > 1050 car .modal est a 1000 */
+}
+#filePreviewModal.show {
+  display: flex;
+}
+
+#downloadLink {
+  display: inline-block; 
+}
+
+/* Modal : taille ajustée et responsive */
+#filePreviewModal .modal-dialog {
+  width: 90%;
+  max-width: 1200px;
+  justify-content: center;
+  margin: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+}
+
+#filePreviewModal .modal-content {
+  width: 50%;
+  max-width: 1200px;
+}
+
+#filePreviewModal .modal-body {
+  width: 100%;
+  height: 80vh;
+  max-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+#filePreview {
+  display: none;
+  width: 100%;
+  max-height: 75vh;
+  min-height: 400px;
+  height: 100%;
+  border: none;
+}
+
+/* Iframe et image : communs */
+#imagePreview {
+  display: none;
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: none;
+}
+
+/* Image spécifique */
+#filePreviewModal .modal-body img {
+  height: auto;
+}
+
+/* Message pour les fichiers non prévisualisables */
+#noPreviewMessage {
+  display: none;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+/* Formulaire d'upload */
+.upload-section {
+  text-align: center;
+}
+
+.upload-section input[type="file"] {
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.upload-section button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-section .success {
+  color: green;
+  margin-top: 10px;
+}
+
+/* Bouton retour */
+.btn-retour {
+  display: inline-block;
+  margin-top: 30px;
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.2s;
+}
+
+.btn-retour:hover {
+  color: #0056b3;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* fond semi-transparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  #confirmationModal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); /* fond semi-transparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #confirmationModal .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 300px;
+    text-align: center;
+  }
+  /* Conteneur du contenu du modal */
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+  }
+  
+  /* Styles pour les boutons  */
+  #btnCancel, #btnConfirm {
+    margin: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #btnCancel { background-color: #eee; }
+  #btnConfirm { background-color: #e74c3c; color: #fff; }
+
+@media (max-width: 768px) {
+  /* Navbar responsive */
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .navbar-left,
+  .navbar-center,
+  .navbar-right {
+    flex: 1 0 100%;
+    text-align: center;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  
+  /* Boutons et champs responsive */
+  .btn-nouvelle,
+  .btn-settings,
+  .btn-logout,
+  #search-projects,
+  #tache-nom,
+  #tache-ech,
+  #tache-fichiers,
+  #modify-fichiers {
+    width: 100%; /* Utilise toute la largeur disponible */
+    margin: 5px 0;
+    box-sizing: border-box; /* Inclus padding/margin dans dimension */
+  }
+  
+  /* Sections */
+  .dashboard-container, .section {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .logo-img, .logo {
+    display: block;
+    margin: 0 auto;
+    max-width: 100px;
+    height: auto;
+  }
+  
+  /* Ajustements divers */
+  .user-info, .filters, .actions-bar, .task-list {
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+  }
+  
+  .filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 0;
+  }
+  
+  .filters div,
+  .filters select {
+    width: auto;
+    text-align: center;
+  }
+}
