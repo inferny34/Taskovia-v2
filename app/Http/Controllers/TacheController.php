@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Tache;
 use App\Models\Fichier;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use App\Http\Requests\StoreTacheRequest;
+use App\Http\Requests\UpdateTacheRequest;
 
 class TacheController extends Controller
 {
@@ -33,95 +36,97 @@ class TacheController extends Controller
         return response()->json($taches);
     }
 
-    // Récupérer les fichiers d’une tâche
-    public function fichiers()
+    public function store(StoreTacheRequest $request)
     {
-        return $this->hasMany(Fichier::class);
+        try {
+            // Création de la tâche avec données validées
+            $tache = Tache::create([
+                'nom' => $request->nom,
+                'priorite' => $request->priorite,
+                'statut' => 'en_cours',
+                'echeance' => $request->echeance,
+                'user_id' => auth()->id()
+            ]);
+
+            // Sauvegarde des fichiers s'il y en a
+            if ($request->hasFile('fichiers')) {
+                foreach ($request->file('fichiers') as $fichier) {
+                    // Générer un nom unique pour éviter les collisions et améliorer la sécurité
+                    $filename = Str::uuid() . '.' . $fichier->getClientOriginalExtension();
+                    $path = $fichier->storeAs('uploads/taches', $filename, 'public');
+
+                    Fichier::create([
+                        'tache_id' => $tache->id,
+                        'nom' => $fichier->getClientOriginalName(),
+                        'chemin' => $path
+                    ]);
+                }
+            }
+
+            $tache->load('fichiers');
+            return response()->json($tache, 201);
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la création de la tâche: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Une erreur est survenue lors de la création de la tâche.'
+            ], 500);
+        }
     }
 
-    public function store(Request $request)
+    public function update(UpdateTacheRequest $request, $id)
     {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-            'priorite' => 'required|in:haute,moyenne,basse',
-            'echeance' => 'nullable|date',
-            'fichiers.*' => 'file|max:10240' // chaque fichier ≤ 10 Mo
-        ]);
-    
-        // Création de la tâche
-        $tache = Tache::create([
-            'nom' => $request->nom,
-            'priorite' => $request->priorite,
-            'statut' => 'en_cours',
-            'echeance' => $request->echeance,
-            'user_id' => auth()->id()
-        ]);
-    
-        // Sauvegarde des fichiers s’il y en a
-        if ($request->hasFile('fichiers')) {
-            foreach ($request->file('fichiers') as $fichier) {
-                $path = $fichier->store('uploads/taches', 'public');
-    
-                Fichier::create([
-                    'tache_id' => $tache->id,
-                    'nom' => $fichier->getClientOriginalName(),
-                    'chemin' => $path
-                ]);
+        try {
+            // Vérifier que la tâche appartient à l'utilisateur connecté
+            $tache = Tache::where('id', $id)
+                ->where('user_id', auth()->id())
+                ->firstOrFail();
+
+            // Mettre à jour la tâche avec les champs validés
+            $tache->update($request->validated());
+
+            // Si des fichiers sont envoyés, on supprime d'abord les anciens liés à cette tâche
+            if ($request->hasFile('fichiers')) {
+                foreach ($tache->fichiers as $ancienFichier) {
+                    // Supprimer dans le stockage via le chemin stocké dans DB
+                    Storage::disk('public')->delete($ancienFichier->chemin);
+                    // Supprimer la ligne dans la base
+                    $ancienFichier->delete();
+                }
+
+                // Ajouter les nouveaux fichiers avec noms uniques
+                foreach ($request->file('fichiers') as $fichier) {
+                    $filename = Str::uuid() . '.' . $fichier->getClientOriginalExtension();
+                    $path = $fichier->storeAs('uploads/taches', $filename, 'public');
+
+                    Fichier::create([
+                        'tache_id' => $tache->id,
+                        'nom' => $fichier->getClientOriginalName(),
+                        'chemin' => $path
+                    ]);
+                }
             }
+            // Si pas de fichiers, on ne touche pas aux fichiers existants
+
+            $tache->load('fichiers');
+
+            return response()->json($tache);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Tâche non trouvée ou accès non autorisé.'
+            ], 404);
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la mise à jour de la tâche: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Une erreur est survenue lors de la mise à jour de la tâche.'
+            ], 500);
         }
-        $tache->load('fichiers');
-        return response()->json($tache, 201);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $tache = Tache::where('id', $id)
-                    ->where('user_id', auth()->id())
-                    ->firstOrFail();
-
-        $validated = $request->validate([
-            'nom' => 'sometimes|string|max:255',
-            'priorite' => 'sometimes|in:haute,moyenne,basse',
-            'statut' => 'sometimes|in:en_cours,en_attente,termine,annule',
-            'echeance' => 'sometimes|date',
-            'fichiers.*' => 'sometimes|file|max:10240'
-        ]);
-
-        // Mettre à jour la tâche avec les champs validés
-        $tache->update($validated);
-
-        // Si des fichiers sont envoyés, on supprime d’abord les anciens liés à cette tâche
-        if ($request->hasFile('fichiers')) {
-            foreach ($tache->fichiers as $ancienFichier) {
-                // Supprimer dans le stockage via le chemin stocké dans DB
-                \Storage::disk('public')->delete($ancienFichier->chemin);
-                // Supprimer la ligne dans la base
-                $ancienFichier->delete();
-            }
-
-            // Ajouter les nouveaux fichiers
-            foreach ($request->file('fichiers') as $fichier) {
-                $path = $fichier->store('uploads/taches', 'public');
-
-                \App\Models\Fichier::create([
-                    'tache_id' => $tache->id,
-                    'nom' => $fichier->getClientOriginalName(),
-                    'chemin' => $path
-                ]);
-            }
-        }
-        // Si pas de fichiers, on ne touche pas aux fichiers existants
-
-        $tache->load('fichiers');
-
-        return response()->json($tache);
     }
 
     public function destroy($id)
     {
         $tache = Tache::where('id', $id)
-                      ->where('user_id', auth()->id())
-                      ->firstOrFail();
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
         $tache->delete();
 
