@@ -6,16 +6,51 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return view('index');
 });
 
+// Routes publiques
+Route::get('/fonctionnalites', function () {
+    return view('fonctionnalites');
+})->name('fonctionnalites');
+
+Route::get('/tarif', function () {
+    return view('tarif');
+})->name('tarif');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::get('/a-propos', function () {
+    return view('a-propos');
+})->name('a-propos');
+
+Route::get('/conditions-utilisation', function () {
+    return view('conditions-utilisation');
+})->name('conditions-utilisation');
+
+Route::get('/politique-confidentialite', function () {
+    return view('politique-confidentialite');
+})->name('politique-confidentialite');
+
+// Routes pour les overlays (chargés via AJAX)
+Route::get('/overlay/connect', function () {
+    return view('partials.overlay-connect');
+})->name('overlay.connect');
+
+Route::get('/overlay/inscription', function () {
+    return view('partials.overlay-inscription');
+})->name('overlay.inscription');
+
+Route::get('/overlay/payment', function () {
+    return view('partials.overlay-payment');
+})->name('overlay.payment');
+
+
+
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return view('mon-dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

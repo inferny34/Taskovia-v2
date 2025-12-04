@@ -29,20 +29,21 @@ function loadOverlay(route, offerType = null) {
             },
             body: formData
           })
-          .then(async response => {
-            if (response.ok) {
-              // Connexion réussie
-              window.location.href = '/dashboard';
-            } else {
-              // Erreur : on essaye d'afficher les messages si dispo
+            .then(async response => {
               const data = await response.json();
-              alert(data.message || "Erreur de connexion.");
-            }
-          })
-          .catch(error => {
-            console.error("Erreur AJAX :", error);
-            alert("Erreur inattendue.");
-          });
+
+              if (response.ok && data.success) {
+                // Connexion réussie - utiliser l'URL de redirection du serveur
+                window.location.href = data.redirect || '/dashboard';
+              } else {
+                // Erreur : afficher le message
+                alert(data.message || "Erreur de connexion.");
+              }
+            })
+            .catch(error => {
+              console.error("Erreur AJAX :", error);
+              alert("Erreur inattendue.");
+            });
         });
       }
 

@@ -27,12 +27,21 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
+        // Si c'est une requête AJAX (depuis l'overlay), retourner JSON
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'redirect' => route('dashboard', absolute: false)
+            ]);
+        }
+
+        // Sinon, redirection classique
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
